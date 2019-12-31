@@ -3,19 +3,26 @@ import { render } from 'react-dom';
 class Modal extends Component {
           state = {
                     active: false,
-                    component: null
+                    component: null,
+                    callback: null
           };
-          close = () => {
+          close = data => {
                     this.setState({
                               active: false
                     });
+                    this.state.callback(data);
           };
           open = props => {
-                    const { component } = props;
-                    const _component = React.createElement(component);
+                    const { component, callback } = props;
+                    const _key = new Date().getTime();
+                    const _component = React.createElement(component, {
+                              close: this.close,
+                              key: _key
+                    });
                     this.setState({
                               active: true,
-                              component: _component
+                              component: _component,
+                              callback: callback
                     });
           };
 
@@ -36,16 +43,17 @@ class Modal extends Component {
                                         >
                                                   <div
                                                             className="over-layer"
-                                                            onClick={this.close}
+                                                            onClick={() => {
+                                                                      this.close();
+                                                            }}
                                                   ></div>
                                                   <div className="panel">
                                                             <div className="head">
                                                                       <span
                                                                                 className="close"
-                                                                                onClick={
-                                                                                          this
-                                                                                                    .close
-                                                                                }
+                                                                                onClick={() => {
+                                                                                          this.close();
+                                                                                }}
                                                                       >
                                                                                 X
                                                                       </span>

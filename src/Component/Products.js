@@ -23,7 +23,23 @@ class Products extends React.Component {
           };
           toAdd = () => {
                     Modal.open({
-                              component: Addinfo
+                              component: Addinfo,
+                              callback: data => {
+                                        if (data) {
+                                                  this.add(data);
+                                        }
+                                        console.log('product', data);
+                              }
+                    });
+          };
+          add = product => {
+                    const _product = [...this.state.products];
+                    _product.push(product);
+                    const _sourceproduct = [...this.state.sourceProduct];
+                    _sourceproduct.push(_sourceproduct);
+                    this.setState({
+                              products: _product,
+                              sourceProduct: _sourceproduct
                     });
           };
           searchText = text => {
