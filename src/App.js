@@ -5,16 +5,20 @@ import Header from './Component/Header';
 import './Css/App.scss';
 import './Css/index.scss';
 import Home from './Pages/Home';
-import './Component/Header';
+import 'react-toastify/dist/ReactToastify.css';
+// import './Component/Header';
 import Notfound from './Pages/Notfound';
 import Login from './Pages/Login';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import Layout from './Layout';
 import './Helper/Auth';
+import Register from './Pages/Register';
 function App() {
           return (
                     <Fragment>
-                              <Header />
+                              {/* <Header /> */}
+                              <Layout />
                               <ToastContainer
                                         position="top-right"
                                         autoClose={5000}
@@ -28,8 +32,13 @@ function App() {
                                         <Switch>
                                                   <Route
                                                             exact
-                                                            path="/login/:loginname"
+                                                            path="/login"
                                                             component={Login}
+                                                  />
+                                                  <Route
+                                                            exact
+                                                            path="/register"
+                                                            component={Register}
                                                   />
                                                   <Route
                                                             exact

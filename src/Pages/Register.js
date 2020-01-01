@@ -6,13 +6,15 @@ function Login(props) {
           const { register, handleSubmit, errors } = useForm();
           const onSubmit = async data => {
                     try {
-                              const { email, password } = data;
-                              const res = await axios.post('/sign', {
+                              const { email, password, nickname } = data;
+                              const res = await axios.post('/register', {
                                         email,
-                                        password
+                                        password,
+                                        nickname,
+                                        type: 0
                               });
                               const jwtToken = res.data;
-                              toast.success('Login Successful');
+                              toast.success('Register Successful');
                               global.auth.setToken(jwtToken);
                               props.history.push('/Home');
                     } catch (error) {
@@ -53,6 +55,36 @@ function Login(props) {
                                                                       {errors.email && (
                                                                                 <p className="">
                                                                                           Email
+                                                                                          is
+                                                                                          required
+                                                                                </p>
+                                                                      )}
+                                                            </div>
+                                                  </div>
+                                                  <div className="field">
+                                                            <label
+                                                                      className="label"
+                                                                      htmlFor="email"
+                                                            >
+                                                                      Nickname
+                                                            </label>
+                                                            <div className="control">
+                                                                      <input
+                                                                                className={`input ${errors.nickname &&
+                                                                                          'is-danger'}`}
+                                                                                placeholder="Nickname"
+                                                                                type="text"
+                                                                                className="input"
+                                                                                name="nickname"
+                                                                                ref={register(
+                                                                                          {
+                                                                                                    required: true
+                                                                                          }
+                                                                                )}
+                                                                      />
+                                                                      {errors.email && (
+                                                                                <p className="">
+                                                                                          Nickname
                                                                                           is
                                                                                           required
                                                                                 </p>

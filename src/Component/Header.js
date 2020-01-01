@@ -1,19 +1,24 @@
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import UserProfile from './UserProfile';
 
 class Header extends React.Component {
           generateLink = () => {
-                    const nickname = this.props.nickname;
+                    const nickname = this.props.user.nickname;
                     if (nickname) {
                               return (
                                         <span className="nickname">
-                                                  {this.props.nickname}
+                                                  {nickname}
                                         </span>
                               );
                     } else {
                               return (
                                         <Fragment>
                                                   <a href="/login">Login</a>
-                                                  <a href="">Register</a>
+
+                                                  <a href="/register">
+                                                            Register
+                                                  </a>
                                         </Fragment>
                               );
                     }
@@ -24,7 +29,7 @@ class Header extends React.Component {
                                         <div className="header">
                                                   <div className="grid">
                                                             <div className="start">
-                                                                      <a href="/">
+                                                                      <a href="/Home">
                                                                                 Home
                                                                       </a>
                                                             </div>
