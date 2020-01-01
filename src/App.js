@@ -8,10 +8,22 @@ import Home from './Pages/Home';
 import './Component/Header';
 import Notfound from './Pages/Notfound';
 import Login from './Pages/Login';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import './Helper/Auth';
 function App() {
           return (
                     <Fragment>
                               <Header />
+                              <ToastContainer
+                                        position="top-right"
+                                        autoClose={5000}
+                                        hideProgressBar
+                                        newestOnTop={false}
+                                        rtl={false}
+                                        draggable
+                                        pauseOnHover
+                              />
                               <Router>
                                         <Switch>
                                                   <Route
