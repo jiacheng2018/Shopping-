@@ -1,79 +1,69 @@
-import React, { Component, Fragment } from 'react';
-import { render } from 'react-dom';
+import React, {Component, Fragment} from 'react';
+import {render} from 'react-dom';
 class Modal extends Component {
-          state = {
-                    active: false,
-                    component: null,
-                    callback: null
-          };
-          close = data => {
-                    this.setState({
-                              active: false
-                    });
-                    this.state.callback(data);
-          };
-          open = (
-                    options = { props: {}, component: null, callback: () => {} }
-          ) => {
-                    const { props, component, callback } = options;
-                    const _key = new Date().getTime();
-                    const _component = React.createElement(component, {
-                              ...props,
-                              close: this.close,
-                              key: _key
-                    });
-                    this.setState({
-                              active: true,
-                              component: _component,
-                              callback: callback
-                    });
-          };
+    state = {
+        active: false,
+        component: null,
+        callback: null
+    };
+    close = data => {
+        this.setState({active: false});
+        this.state.callback(data);
+    };
+    open = (options = {
+        props: {},
+        component: null,
+        callback: () => {}
+    }) => {
+        const {props, component, callback} = options;
+        const _key = new Date().getTime();
+        const _component = React.createElement(component, {
+            ...props,
+            close: this.close,
+            key: _key
+        });
+        this.setState({active: true, component: _component, callback: callback});
+    };
 
-          render() {
-                    const _class = {
-                              true: 'panel-wrapper active',
-                              false: 'panel-wrapper'
-                    };
-                    return (
-                              <Fragment>
-                                        <div
-                                                  className={
-                                                            _class[
-                                                                      this.state
-                                                                                .active
-                                                            ]
-                                                  }
-                                        >
-                                                  <div
-                                                            className="over-layer"
-                                                            onClick={() => {
-                                                                      this.close();
-                                                            }}
-                                                  ></div>
-                                                  <div className="panel">
-                                                            <div className="head">
-                                                                      <span
-                                                                                className="close"
-                                                                                onClick={() => {
-                                                                                          this.close();
-                                                                                }}
-                                                                      >
-                                                                                X
-                                                                      </span>
-                                                                      {
-                                                                                this
-                                                                                          .state
-                                                                                          .component
-                                                                      }
-                                                            </div>
-                                                  </div>
-                                        </div>
-                              </Fragment>
-                    );
-          }
+    render() {
+        const _class = {
+            true: 'panel-wrapper active',
+            false: 'panel-wrapper'
+        };
+        return (
+            <Fragment>
+                <div className={
+                    _class[this.state.active]
+                }>
+                    <div className="over-layer"
+                        onClick={
+                            () => {
+                                this.close();
+                            }
+                    }></div>
+                <div className="panel">
+                    <div className="head">
+                        <span className="close"
+                            onClick={
+                                () => {
+                                    this.close();
+                                }
+                        }>
+                            X
+                        </span>
+                        {
+                        this.state.component
+                    } </div>
+                </div>
+            </div>
+        </Fragment>
+        );
+    }
 }
 const _div = document.createElement('div');
 document.body.appendChild(_div);
-const _panel = render(<Modal />, _div);
-console.log(_panel);
+const _panel = render (
+    <Modal/>,
+    _div
+);
 export default _panel;

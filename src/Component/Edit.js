@@ -46,6 +46,14 @@ export default class Addinfo extends Component {
             toast.success('Add Success!');
         });
     };
+    OnDelete = () => {
+        axios.delete(`products/${
+            this.state.id
+        }`).then(res => {
+            this.props.delete(this.state.id);
+            toast.success("Delete Success!");
+        })
+    }
     toastif = () => {
         toast.success('Add Success!');
     };
@@ -163,6 +171,17 @@ export default class Addinfo extends Component {
                                     }
                             }>
                                 Cancel
+                            </button>
+                        </div>
+                        <div className="control">
+                            <button onClick={
+                                    () => {
+                                        this.OnDelete()
+                                    }
+                                }
+                                className="button"
+                                type="button">
+                                Delete
                             </button>
                         </div>
                     </div>

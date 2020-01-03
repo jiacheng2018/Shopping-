@@ -4,10 +4,12 @@ import ToolBox from './ToolBox';
 import Modal from '../Component/Modal';
 import Addinfo from '../Component/Addinfo';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import axios from '../Helper/Instance';
 class Products extends React.Component {
     state = {
         products: [],
-        sourceProduct: []
+        sourceProduct: [],
+        cartNum: 0
     };
     componentWillMount = () => {
         fetch('http://localhost:3009/products').then(response => {
@@ -27,6 +29,14 @@ class Products extends React.Component {
             }
         });
     };
+    delete = id => {
+        const _products = this.state.products.filter(item => {
+            return item.id !== id
+        })
+        const _sourceproducts = this.state.sourceProduct.filter(item => {
+            return item.id !== id
+        })
+    }
     add = product => {
         const _product = [...this.state.products];
         _product.push(product);
@@ -37,11 +47,14 @@ class Products extends React.Component {
     searchText = text => {
         let _text = [...this.state.sourceProduct];
         _text = _text.filter(p => {
-            const matchArray = p.name.match(new RegExp(text, 'gi'));
-            return !! matchArray;
-        });
+            if (p.name) {
+                const matchArray = p.name.match(new RegExp(text, 'gi'));
+                return !! matchArray;
+            }
+        })
         this.setState({products: _text});
     };
+
     update = product => {
         const _products = [...this.state.products];
         const _index = _products.findIndex(p => p.id == product.id);
@@ -51,12 +64,25 @@ class Products extends React.Component {
         _sproduct.splice(_sindex, 1, product);
         this.setState({products: _products, sourceproduct: _sproduct})
     }
+    updateCartNum = async () => {
+        const item = await this.initiaCartNum()
+        this.setState({cartNum: item})
+    }
+    initiaCartNum = async () => {
+        const res = await axios.get('/carts');
+        const data = res.data || [];
+        const itemAmout = data.map(item => item.mount).reduce((a, value) => a + value, 0);
+        return itemAmout;
+    }
     render() {
         return (
             <Fragment>
                 <ToolBox search={
-                    this.searchText
-                }/>
+                        this.searchText
+                    }
+                    cartNum={
+                        this.state.cartNum
+                    }/>
                 <div className="products">
                     <div className="columns is-multiline is-desktop">
                         <TransitionGroup component={null}>
@@ -78,8 +104,14 @@ class Products extends React.Component {
                                                 p.id
                                         }>
                                             <Product product={p}
+                                                Delete={
+                                                    this.delete
+                                                }
                                                 update={
                                                     this.update
+                                                }
+                                                updateNum={
+                                                    this.updateCartNum
                                                 }/>
                                         </div>
                                     </CSSTransition>

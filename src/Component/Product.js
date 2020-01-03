@@ -3,7 +3,7 @@ import shoe from '../images/shoe.jpg';
 import {formatPrice} from '../Helper';
 import Modal from '../Component/Modal';
 import Edit from '../Component/Edit';
-import {toast} from 'react-toastify';
+import {toast, ToastPosition} from 'react-toastify';
 import axios from '../Helper/Instance';
 class Product extends React.Component {
     toEdit = () => {
@@ -15,24 +15,42 @@ class Product extends React.Component {
                 }
             },
             props: {
-                product: this.props.product
+                product: this.props.product,
+                delete: this.props.Delete
             }
         });
     };
-    addCart = async () => {
-        const {name, image, price, id} = this.props.product;
-        const storeId = await axios.get(`/carts?productId=${id}`);
-        const cart = {
-            productId: id,
-            name,
-            image,
-            price,
-            mount: 1
-        }
-        axios.post('/carts', cart).then(res => {
-            toast.success("Successful Added");
-        })
+    componentDidMount = () => {
+        this.props.updateNum();
     }
+    addCart = async () => {
+        try {
+            const {id, name, image, price} = this.props.product;
+            const res = await axios.get(`/carts?productId=${id}`);
+            const carts = res.data;
+            if (carts && carts.length > 0) {
+                const cart = carts[0];
+                cart.mount += 1;
+                await axios.put(`/carts/${
+                    cart.id
+                }`, cart);
+            } else {
+                const cart = {
+                    productId: id,
+                    name,
+                    image,
+                    price,
+                    mount: 1
+                };
+                await axios.post('/carts', cart);
+            }
+            this.props.updateNum();
+            toast.success('Add Cart Success');
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     render() {
         const _class = {
             available: 'product',
@@ -55,7 +73,7 @@ class Product extends React.Component {
                     <div className="img-wrapper">
                         <div className="out-stock-text">
                             Out Of
-                                                                                                                                                                                                                                                                                                                                  Stock
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Stock
                         </div>
                         <figure className="image is-4by3">
                             <img alt="img"
